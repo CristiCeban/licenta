@@ -1,0 +1,6 @@
+{
+  "apiPort": 3000,
+  "bcryptSalt": 12,
+  "jwtSecret": "secret jwt",
+  "mongoUrl": "mongodb+srv://cristi:cristi@licenta.ajabl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+}
