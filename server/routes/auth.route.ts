@@ -1,6 +1,7 @@
 import {Router} from "express"
 import {check, validationResult} from 'express-validator'
 import Utils from "../utils/Utils";
+import axios from "axios";
 
 const User = require('../models/User')
 
@@ -111,6 +112,35 @@ router.post(
 
             return res.json({token, newUserFound})
 
+        } catch (e) {
+            await res.status(500).json({message: 'Server error'})
+        }
+    }
+)
+
+router.post(
+    '/facebook',
+    async (req, res) => {
+        try {
+            const {token} = req.body
+
+            const fetchedUser = await axios.get(`https://graph.facebook.com/v10.0/me?transport=cors&access_token=${token}&fields=id,first_name,last_name,email,picture.type(large)`)
+            const {email, id} = fetchedUser.data
+
+            const user = await User.findOne({facebookId: id}, {password: 0, "__v": 0})
+            if (!user) {
+                const hashedPassword = await Utils.createPassword()
+                const newUser = new User({facebookId: id, email, password: hashedPassword})
+                await newUser.save()
+                const newUserFound = await User.findOne({facebookId: id}, {password: 0, "__v": 0})
+                const token = Utils.createToken(newUserFound.id)
+                res.status(201).json({token, newUserFound})
+            }
+            //if user exist
+            else {
+                const token = Utils.createToken(user.id)
+                res.json({token, user})
+            }
         } catch (e) {
             await res.status(500).json({message: 'Server error'})
         }

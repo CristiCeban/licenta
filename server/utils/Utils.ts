@@ -10,7 +10,14 @@ const Utils = {
             {expiresIn: '24h'}
         )
     },
-    createPassword: async (password: string) => {
+    randomString: (size?: number) => {
+        if (!size)
+            size = 8
+        return Math.random().toString(36).slice(-size)
+    },
+    createPassword: async (password?: string) => {
+        if (!password)
+            password = Math.random().toString(36).slice(-8)
         return bcrypt.hash(password, config.get('bcryptSalt'))
     },
     checkPassword: async (password: string, bdPassword: string) => {

@@ -98,3 +98,51 @@ export const setTokenAction = (token: string) => {
         }
     }
 }
+
+export const onFacebookLogin = (facebook_token: string) => {
+    return async (dispatch: Dispatch<AuthAction>) => {
+        try {
+            dispatch({type: 'AUTH/SET_LOADING', payload: true})
+            const response = await ApiService.post('auth/facebook', {token: facebook_token})
+            const {token} = (response as any)
+            await AuthStorage.setToken(token)
+            dispatch({type: 'AUTH/ON_LOGIN', payload: (response as any)})
+        } catch (e) {
+            console.warn(e)
+        } finally {
+            dispatch({type: 'AUTH/SET_LOADING', payload: false})
+
+        }
+    }
+}
+
+export const onGoogleLogin = (google_token: string, user: Object) => {
+    return async (dispatch: Dispatch<AuthAction>) => {
+        try {
+            dispatch({type: 'AUTH/SET_LOADING', payload: true})
+            const response = await ApiService.post('auth/google', {token: google_token, user})
+            const {token} = (response as any)
+            await AuthStorage.setToken(token)
+            dispatch({type: 'AUTH/ON_LOGIN', payload: (response as any)})
+        } catch (e) {
+            console.warn(e)
+        } finally {
+            dispatch({type: 'AUTH/SET_LOADING', payload: false})
+        }
+    }
+}
+
+export const onRegisterAction = (body: any, navigation: any) => {
+    return async (dispatch: Dispatch<AuthAction>) => {
+        try {
+            dispatch({type: 'AUTH/SET_REGISTER', payload: true})
+            await ApiService.post('auth/register', body)
+            navigation.goBack()
+        } catch (e) {
+            console.warn(e)
+            dispatch({type: 'AUTH/SET_ERRORS_REGISTER', payload: e.response.data.errors})
+        } finally {
+            dispatch({type: 'AUTH/SET_REGISTER', payload: false})
+        }
+    }
+}

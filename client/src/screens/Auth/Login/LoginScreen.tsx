@@ -3,13 +3,15 @@ import {ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View} 
 import {useNavigation} from '@react-navigation/native';
 import {Formik} from "formik";
 import * as yup from 'yup';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
 import {Entypo, FontAwesome5} from '@expo/vector-icons';
 import {useDispatch, useSelector} from "react-redux";
 import {styles} from "./styles";
 import {LocalizationContext} from "../../../contexts/LocalizationContext";
 import Colors from "../../../constants/Colors";
 import {ApplicationState} from "../../../store";
-import {authLoginAction} from "../../../store/actions/authActions";
+import {authLoginAction, onFacebookLogin, onGoogleLogin} from "../../../store/actions/authActions";
 import LanguagePicker from "../../../components/general/LanguagePicker/LanguagePicker";
 
 const LoginScreen = () => {
@@ -37,11 +39,41 @@ const LoginScreen = () => {
         dispatch(authLoginAction(values))
     }
 
-    const onFacebook = () => {
+    const onFacebook = async () => {
+        try {
+            await Facebook.initializeAsync({appId: '1124900348023360', appName: 'x-ray'})
+            // @ts-ignore
+            const {token, type} = await Facebook.logInWithReadPermissionsAsync({
+                    permissions: ['public_profile', 'email']
+                },
+            );
+            if (type === 'success') {
+                console.log(token)
+                dispatch(onFacebookLogin(token))
+            }
+        } catch (e) {
+            console.warn(e)
+            alert(`Facebook Login Error: ${e.message}`);
+        }
     }
 
-    const onGoogle = () => {
-
+    const onGoogle = async () => {
+        try {
+            //TODO CHANGE CLIENT ID
+            // @ts-ignore
+            const {type, accessToken, user} = await Google.logInAsync({
+                androidClientId: '861519663334-rc4ta1tvoi3voep835n0m2sofkcmqjl3.apps.googleusercontent.com',
+                // androidClientId: '428182619341-opj71gjrto7420o6078f4ls3lua9f9jo.apps.googleusercontent.com',
+                // iosClientId: '861519663334-ekns07bj4dpad21pd31ob6dadhj2md44.apps.googleusercontent.com',
+                iosClientId: '428182619341-hkp28a77s5p56latavu3pj2qiiajv96v.apps.googleusercontent.com',
+                scopes: ['profile', 'email'],
+            });
+            if (type === 'success')
+                dispatch(onGoogleLogin(accessToken, user))
+        } catch (e) {
+            console.warn(e)
+            alert(`Google Login Error: ${e.message}`);
+        }
     }
 
     return (

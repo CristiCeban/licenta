@@ -9,6 +9,7 @@ import {styles} from "./styles";
 import Colors from "../../../constants/Colors";
 import {LocalizationContext} from "../../../contexts/LocalizationContext";
 import {Entypo, FontAwesome5} from "@expo/vector-icons";
+import {onRegisterAction} from "../../../store/actions/authActions";
 
 const RegisterScreen = () => {
     const {t} = useContext(LocalizationContext)
@@ -35,7 +36,7 @@ const RegisterScreen = () => {
     }
 
     const onSubmit = (values: any) => {
-        console.log(values)
+        dispatch(onRegisterAction(values, navigation))
     }
 
     return (
@@ -125,7 +126,7 @@ const RegisterScreen = () => {
                         </View>
 
                         <View style={styles.center}>
-                            {touched.password && errors.password ?
+                            {touched.confirm_password && errors.confirm_password ?
                                 <Text style={styles.textError}>{errors.confirm_password}</Text> : null}
                         </View>
 
@@ -135,7 +136,7 @@ const RegisterScreen = () => {
                                     style={styles.textError}>{registerErrors.find((error) => error.param === 'confirm_password')?.msg || ''}</Text> : null}
                         </View>
 
-                        <TouchableOpacity style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.buttonContainer} onPress={() => handleSubmit()}>
                             {isRegistering ?
                                 <View style={styles.center}>
                                     <ActivityIndicator color={Colors.main1} size={'large'}/>

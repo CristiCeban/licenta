@@ -32,7 +32,7 @@ const start = async () => {
         const apiPort = config.get('apiPort') || 3000
         const app = express()
         app.use(cors())
-        app.use(express.json({extended: true}))
+        app.use(express.json())
         app.get('/asa', (req, res) => res.send('ASA'))
         app.get('/api/', (req, res) => res.send(200).json({msg: 'asa'}))
         app.use('/api/auth', require('./routes/auth.route'))
