@@ -21,7 +21,9 @@ const BottomTabNavigator = () => {
         <BottomTab.Navigator
             lazy={true}
             tabBarOptions={{
-                activeTintColor: Colors.main1,
+                // activeTintColor: Colors.main1,
+                // activeTintColor: Colors.secondaryText,
+                activeTintColor: Colors.primaryText,
                 inactiveTintColor: Colors.secondaryText,
                 style: {
                     backgroundColor: Colors.menuBar,
@@ -37,7 +39,8 @@ const BottomTabNavigator = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: () => null,
-                    tabBarIcon: ({color}) => <TabBarIcon name={'ios-home'} color={color}/>
+                    tabBarIcon: ({color, focused}) => <TabBarIcon name={focused ? 'home' : 'home-outline'}
+                                                                  color={color}/>
                 }}
             />
 
@@ -46,7 +49,8 @@ const BottomTabNavigator = () => {
                 component={BrowseStack}
                 options={{
                     tabBarLabel: () => null,
-                    tabBarIcon: ({color}) => <TabBarIcon name={'browsers-outline'} color={color}/>
+                    tabBarIcon: ({color, focused}) => <TabBarIcon name={focused ? 'browsers' : 'browsers-outline'}
+                                                                  color={color}/>
                 }}
             />
 
@@ -55,7 +59,8 @@ const BottomTabNavigator = () => {
                 component={InfoStack}
                 options={{
                     tabBarLabel: () => null,
-                    tabBarIcon: ({color}) => <TabBarIcon name={'md-information-circle-outline'} color={color}/>
+                    tabBarIcon: ({color, focused}) => <TabBarIcon
+                        name={focused ? 'md-information-circle' : 'md-information-circle-outline'} color={color}/>
                 }}
             />
 
@@ -64,7 +69,8 @@ const BottomTabNavigator = () => {
                 component={ProfileStack}
                 options={{
                     tabBarLabel: () => null,
-                    tabBarIcon: ({color}) => <TabBarIcon name={'person'} color={color}/>
+                    tabBarIcon: ({color, focused}) => <TabBarIcon name={focused ? 'person' : 'person-outline'}
+                                                                  color={color}/>
                 }}
             />
 

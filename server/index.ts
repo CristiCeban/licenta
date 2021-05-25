@@ -1,5 +1,6 @@
 import express from 'express'
 
+const morgan = require('morgan');
 const mongoose = require('mongoose')
 
 const cors = require('cors')
@@ -33,6 +34,7 @@ const start = async () => {
         const app = express()
         app.use(cors())
         app.use(express.json())
+        app.use(morgan('dev'));
         app.get('/asa', (req, res) => res.send('ASA'))
         app.get('/api/', (req, res) => res.send(200).json({msg: 'asa'}))
         app.use('/api/auth', require('./routes/auth.route'))
