@@ -3,6 +3,7 @@ import * as Path from "path";
 
 const multer = require('multer');
 const PythonShell = require('python-shell').PythonShell;
+const auth = require('../middlewares/auth.middleware')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,6 +28,7 @@ const router = Router()
 router.post(
     '/predict',
     [
+        auth,
         imageUpload.single('image'),
     ],
     async (req, res) => {
@@ -53,8 +55,13 @@ router.post(
 
             PythonShell.run('main.py', options, (err, response) => {
                 if (err) throw err
-                console.log('results: %j', response)
-                res.send(response)
+                const percent = Number(response[0])
+                console.log('results: %j', percent)
+                const resJson = {
+                    type: percent > 0.5 ? 'Pneumonia' : 'Normal',
+                    percent,
+                }
+                res.status(200).json(resJson)
             })
 
         } catch (e) {
