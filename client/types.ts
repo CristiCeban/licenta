@@ -17,6 +17,7 @@ export type AuthStackParamList = {
 
 export type HomeStackParamList = {
     Home: undefined,
+    Prediction: undefined
 }
 
 export type BrowseStackParamList = {

@@ -21,8 +21,6 @@ const BottomTabNavigator = () => {
         <BottomTab.Navigator
             lazy={true}
             tabBarOptions={{
-                // activeTintColor: Colors.main1,
-                // activeTintColor: Colors.secondaryText,
                 activeTintColor: Colors.primaryText,
                 inactiveTintColor: Colors.secondaryText,
                 style: {

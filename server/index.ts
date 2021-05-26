@@ -35,7 +35,7 @@ const start = async () => {
         app.use(cors())
         app.use(express.json())
         app.use(morgan('dev'));
-        app.get('/asa', (req, res) => res.send('ASA'))
+        app.get('/', (req, res) => res.send('AM DE FACUT PROIECTUL'))
         app.get('/api/', (req, res) => res.send(200).json({msg: 'asa'}))
         app.use('/api/auth', require('./routes/auth.route'))
         app.use('/api/nn', require('./routes/nn.route'))

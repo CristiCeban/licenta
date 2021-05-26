@@ -1,7 +1,7 @@
 const EN = {
     auth: {
         login: 'Login',
-        register:'Register',
+        register: 'Register',
         email: 'Email',
         password: 'Password',
         passwordConfirmation: 'Password confirmation',
@@ -16,6 +16,14 @@ const EN = {
             pleaseEnterValidEmail: 'Please enter a valid email',
             pleaseRepeatYourPassword: 'Please repeat your password',
             passwordMustMatch: 'Password must match',
+        }
+    },
+    screenHeaders: {
+        info: {
+            aboutApp: 'About App'
+        },
+        profile: {
+            profile: 'Profile'
         }
     }
 }

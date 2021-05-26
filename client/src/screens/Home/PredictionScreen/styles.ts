@@ -5,10 +5,16 @@ export const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flex: 1,
-        backgroundColor: Colors.background1
+        backgroundColor: Colors.background1,
+        paddingHorizontal: 10,
     },
-    textButton: {
-        fontSize: 16,
+    textInfo: {
+        fontSize: 14,
         color: Colors.primaryText,
+    },
+    buttonContainer: {
+        padding: 10,
+        margin: 40,
+        backgroundColor: Colors.background2,
     }
 })

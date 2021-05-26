@@ -17,6 +17,14 @@ const RO = {
             pleaseRepeatYourPassword: 'Repetati parola',
             passwordMustMatch: 'Parolele trebuie sa coincida',
         }
+    },
+    screenHeaders:{
+        info:{
+            aboutApp: 'Despre aplicatie'
+        },
+        profile: {
+            profile: 'Profil'
+        }
     }
 }
 

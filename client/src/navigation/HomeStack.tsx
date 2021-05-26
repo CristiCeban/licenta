@@ -3,6 +3,7 @@ import {createStackNavigator} from "@react-navigation/stack";
 import {HomeStackParamList} from "../../types";
 import Colors from "../constants/Colors";
 import HomeScreen from "../screens/Home/HomeScreen/HomeScreen";
+import PredictionScreen from "../screens/Home/PredictionScreen/PredictionScreen";
 
 const Stack = createStackNavigator<HomeStackParamList>()
 
@@ -23,6 +24,10 @@ const HomeStack = () => {
             <Stack.Screen
                 name={'Home'}
                 component={HomeScreen}
+            />
+            <Stack.Screen
+                name={'Prediction'}
+                component={PredictionScreen}
             />
         </Stack.Navigator>
     )

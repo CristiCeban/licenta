@@ -9,9 +9,5 @@ export const styles = StyleSheet.create({
     },
     text:{
         color:'white'
-    },
-    modalize:{
-        backgroundColor:Colors.bottomGradient,
-        // marginHorizontal:5,
     }
 })
