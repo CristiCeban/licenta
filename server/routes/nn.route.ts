@@ -4,6 +4,8 @@ import * as Path from "path";
 const multer = require('multer');
 const PythonShell = require('python-shell').PythonShell;
 const auth = require('../middlewares/auth.middleware')
+const Predict = require('../models/Predict')
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -34,7 +36,7 @@ router.post(
     async (req, res) => {
         console.log('entered')
         try {
-
+            const {userId} = req.user
             console.log(req.file);
             console.log(__dirname)
             const dirs = __dirname.split('\\')
@@ -53,10 +55,12 @@ router.post(
                 args: ['-path', dir]
             };
 
-            PythonShell.run('main.py', options, (err, response) => {
+            PythonShell.run('main.py', options, async (err, response) => {
                 if (err) throw err
                 const percent = Number(response[0])
                 console.log('results: %j', percent)
+                const predict = new Predict({path: dir, percent, date: new Date(), userId})
+                await predict.save()
                 const resJson = {
                     type: percent > 0.5 ? 'Pneumonia' : 'Normal',
                     percent,
@@ -65,14 +69,9 @@ router.post(
             })
 
         } catch (e) {
-            await res.status(500).json({message: 'Server error'})
+           res.status(500).json({message: 'Server error'})
         }
     }
-)
-
-router.get(
-    '/',
-    (req, res) => res.send('nn')
 )
 
 module.exports = router
