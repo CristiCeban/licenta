@@ -3,6 +3,7 @@ import {check, validationResult} from 'express-validator'
 import Utils from "../utils/Utils";
 import axios from "axios";
 
+const auth = require('../middlewares/auth.middleware')
 const User = require('../models/User')
 
 const router = Router()
@@ -110,7 +111,7 @@ router.post(
 
             const token = Utils.createToken(newUserFound.id)
 
-            return res.json({token, newUserFound})
+            return res.json({token, user: newUserFound})
 
         } catch (e) {
             await res.status(500).json({message: 'Server error'})
@@ -118,6 +119,7 @@ router.post(
     }
 )
 
+// api/auth/facebook
 router.post(
     '/facebook',
     async (req, res) => {
@@ -134,7 +136,7 @@ router.post(
                 await newUser.save()
                 const newUserFound = await User.findOne({facebookId: id}, {password: 0, "__v": 0})
                 const token = Utils.createToken(newUserFound.id)
-                res.status(201).json({token, newUserFound})
+                res.status(201).json({token, user:newUserFound})
             }
             //if user exist
             else {
@@ -147,6 +149,7 @@ router.post(
     }
 )
 
+// api/auth/google
 router.post(
     '/google',
     async (req, res) => {
@@ -164,14 +167,32 @@ router.post(
                 await newUser.save()
                 const newUserFound = await User.findOne({email}, {password: 0, "__v": 0})
                 const token = Utils.createToken(newUserFound.id)
-                await res.status(201).json({token, newUserFound})
+                await res.status(201).json({token, user:newUserFound})
             }
             // if user is already registered
             else {
                 const token = Utils.createToken(isRegUser.id)
-                await res.json({token, isRegUser})
+                await res.json({token, user:isRegUser})
             }
         } catch (e) {
+            await res.status(500).json({message: 'Server error'})
+        }
+    }
+)
+
+// api/auth/me
+router.get(
+    '/me',
+    [auth],
+    async (req, res) => {
+        try {
+            const {userId} = req.user
+            const user = await User.findOne({_id: userId}, {
+                __v: 0, password: 0,
+            })
+            return res.json(user)
+        } catch (e) {
+            console.warn(e)
             await res.status(500).json({message: 'Server error'})
         }
     }

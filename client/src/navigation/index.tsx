@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../store";
 import BottomTabNavigator from "./BottomTabNavigator";
 import AuthStorage from "../services/Auth-storage";
-import {setTokenAction} from "../store/actions/authActions";
+import {getUser, setTokenAction} from "../store/actions/authActions";
 
 const Navigation = () => {
     const dispatch = useDispatch()
@@ -21,6 +21,18 @@ const Navigation = () => {
                 dispatch(setTokenAction(token))
         })()
     }, [])
+
+    const loadInitRequests = async () => {
+        if (!token)
+            return;
+        dispatch(getUser());
+    }
+
+    useEffect(() => {
+        (async () => {
+            await loadInitRequests()
+        })()
+    }, [token])
 
     return (
         <LocalizationContextProvider>

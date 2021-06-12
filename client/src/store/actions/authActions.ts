@@ -47,6 +47,11 @@ export interface ISetErrorsLogin {
     payload: Array<ServerErrorType>
 }
 
+export interface IGetUser {
+    readonly type: 'AUTH/GET_USER',
+    payload: User,
+}
+
 export type AuthAction =
     | IAuthLoginAction
     | IAuthSetLoading
@@ -56,6 +61,7 @@ export type AuthAction =
     | ISetRegister
     | ISetErrorsRegister
     | ISetErrorsLogin
+    | IGetUser
 
 
 export const authLoginAction = (body: any) => {
@@ -63,7 +69,6 @@ export const authLoginAction = (body: any) => {
         try {
             dispatch({type: 'AUTH/SET_LOADING', payload: true})
             const response = await ApiService.post('auth/login', body)
-            console.log(response)
             //because of interceptors used in apiServices.
             const {token} = (response as any)
             await AuthStorage.setToken(token)
@@ -143,6 +148,18 @@ export const onRegisterAction = (body: any, navigation: any) => {
             dispatch({type: 'AUTH/SET_ERRORS_REGISTER', payload: e.response.data.errors})
         } finally {
             dispatch({type: 'AUTH/SET_REGISTER', payload: false})
+        }
+    }
+}
+
+export const getUser = () => {
+    return async (dispatch: Dispatch<AuthAction>) => {
+        try {
+            const response = await ApiService.get('auth/me')
+            dispatch({type: 'AUTH/GET_USER', payload: (response as unknown as User)})
+            console.log(response)
+        } catch (e) {
+            console.warn(e)
         }
     }
 }

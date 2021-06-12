@@ -1,26 +1,24 @@
-import React, {useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import {ActivityIndicator, Image, Text, TouchableOpacity, View} from "react-native";
 import {Formik} from "formik";
 import {MaterialIcons} from '@expo/vector-icons';
-import {useNavigation} from "@react-navigation/native";
 import Modal from 'react-native-modal';
 import {styles} from "./styles";
 import TakePhoto from "../../../components/general/TakePhoto/TakePhoto";
 import {TakePhotoType} from "../../../models/Image";
 import SelectPhoto from "../../../components/general/SelectPhoto/SelectPhoto";
-import {useDispatch} from "react-redux";
 import Colors from "../../../constants/Colors";
 import Utils from "../../../services/Utils";
 import ApiService from "../../../services/ApiService";
 import ImageViewer from "react-native-image-zoom-viewer";
 import {PredictType} from "../../../models/predict";
+import {LocalizationContext} from "../../../contexts/LocalizationContext";
 
 
 const PredictionScreen = () => {
+    const {t} = useContext(LocalizationContext)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [prediction, setPrediction] = useState<PredictType>()
-    const dispatch = useDispatch()
-    const navigation = useNavigation()
     const formikRef = useRef<any>(null)
     const [isShowingPhotoModal, setShowPhotoModal] = useState<boolean>(false)
     const [isShowingTakePhoto, setShowingTakePhoto] = useState<boolean>(false)
@@ -61,24 +59,30 @@ const PredictionScreen = () => {
         }
     }
 
+    const renderPrediction = (prediction: PredictType | undefined) => {
+        if (!prediction)
+            return
+        if (prediction.type === 'Normal')
+            return <Text style={styles.textInfo}>Congratulations, you don't have sign of pneumonia</Text>
+        return <Text style={styles.textInfo}>{`${t('home.youHave')} ${prediction.percent * 100}% ${t('home.ofPneumonia')}`}</Text>
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.textInfo}>
-                Take a image with camera or select one from existing in media library,Please pay attention what image
-                should be the actual image of a x-ray because NN works only with x-ray,otherwise it would be garbage
-                input -{">"} garbage output
+                {t('home.info')}
             </Text>
 
             <View style={styles.flexRow}>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => setShowingTakePhoto(true)}>
                     <MaterialIcons name="photo-camera" size={20} color={Colors.primaryText} style={styles.icon}/>
-                    <Text style={styles.textInfo}>Take a photo</Text>
+                    <Text style={styles.textInfo}>{t('home.takePhoto')}</Text>
                 </TouchableOpacity>
 
 
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => setShowingSelectPhoto(true)}>
                     <MaterialIcons name="perm-media" size={20} color={Colors.primaryText} style={styles.icon}/>
-                    <Text style={styles.textInfo}>Media Library</Text>
+                    <Text style={styles.textInfo}>{t('home.mediaLibrary')}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -89,10 +93,7 @@ const PredictionScreen = () => {
             <SelectPhoto callbackCancel={selectPhotoCancel} callbackSuccess={selectPhotoSuccess}
                          isShowing={isShowingSelectPhoto}/>
 
-            {prediction ?
-            <Text style={styles.textInfo}>
-                {`${(100 * prediction.percent).toFixed(2)}%`}
-            </Text> : null}
+            {renderPrediction(prediction)}
 
             <Formik
                 innerRef={formikRef}
@@ -134,7 +135,7 @@ const PredictionScreen = () => {
                                         <>
                                             <MaterialIcons name="send" size={20} color={Colors.primaryText}
                                                            style={styles.icon}/>
-                                            <Text style={styles.textInfo}>Send</Text>
+                                            <Text style={styles.textInfo}>{t('home.send')}</Text>
                                         </>
                                     }
                                 </TouchableOpacity>
@@ -142,7 +143,7 @@ const PredictionScreen = () => {
                                 <TouchableOpacity style={styles.buttonContainer} onPress={onDelete}>
                                     <MaterialIcons name="delete" size={20} color={Colors.primaryText}
                                                    style={styles.icon}/>
-                                    <Text style={styles.textInfo}>Delete</Text>
+                                    <Text style={styles.textInfo}>{t('home.delete')}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View> : null}

@@ -64,6 +64,11 @@ const AuthReducer = (state: AuthState = initialState, action: AuthAction) => {
                 ...state,
                 registerErrors: action.payload
             }
+        case "AUTH/GET_USER":
+            return {
+                ...state,
+                user: action.payload,
+            }
         default:
             return state
     }

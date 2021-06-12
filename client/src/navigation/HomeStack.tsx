@@ -1,16 +1,18 @@
-import React from "react";
+import React, {useContext} from "react";
 import {createStackNavigator} from "@react-navigation/stack";
 import {HomeStackParamList} from "../../types";
 import Colors from "../constants/Colors";
-import HomeScreen from "../screens/Home/HomeScreen/HomeScreen";
 import PredictionScreen from "../screens/Home/PredictionScreen/PredictionScreen";
+import {LocalizationContext} from "../contexts/LocalizationContext";
 
 const Stack = createStackNavigator<HomeStackParamList>()
 
 const HomeStack = () => {
+    const {t} = useContext(LocalizationContext)
+
     return (
         <Stack.Navigator
-            initialRouteName={'Home'}
+            initialRouteName={'Prediction'}
             screenOptions={{
                 headerTintColor: Colors.background1,
                 headerStyle: {
@@ -22,12 +24,12 @@ const HomeStack = () => {
             }}
         >
             <Stack.Screen
-                name={'Home'}
-                component={HomeScreen}
-            />
-            <Stack.Screen
                 name={'Prediction'}
                 component={PredictionScreen}
+                options={{
+                    title: t('screenHeaders.home.makePredict'),
+                    headerTitleStyle: {color: 'white', alignSelf: 'center'}
+                }}
             />
         </Stack.Navigator>
     )
