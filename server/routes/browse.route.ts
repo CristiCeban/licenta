@@ -11,17 +11,27 @@ router.get(
     [auth],
     async (req, res) => {
         try {
-            const {page = 1, limit = 10} = req.query
-            const rawPredictions = await Predict.find({}, {
+            const {page = 1, limit = 10, type = 'all'} = req.query
+            let filterType = {$gt: -1, $lt: 2}
+            if (type === 'pneumonia')
+                filterType = {$gt: 0.5, $lt: 2}
+            else if (type === 'normal')
+                filterType = {$gt: -1, $lt: 0.5}
+            const rawPredictions = await Predict.find({
+                percent: filterType
+            }, {
                 __v: 0, userId: 0,
             }).limit((limit * 1 as any))
                 .skip((page - 1) * limit)
                 .exec()
+
             const predictions = rawPredictions.map(el => ({
                 ...el['_doc'],
                 path: el['_doc'].path.split('\\').pop()
             }))
-            const count = await Predict.countDocuments()
+
+            const count = await Predict.countDocuments({percent: filterType})
+
             res.json({
                 predictions,
                 totalPages: Math.ceil((count) / limit),
@@ -42,19 +52,31 @@ router.get(
     async (req, res) => {
         try {
             const {userId} = req.user
-            const {page = 1, limit = 10} = req.query
+            const {page = 1, limit = 10, type = 'all'} = req.query
+            let filterType = {$gt: -1, $lt: 2}
+            if (type === 'pneumonia')
+                filterType = {$gt: 0.5, $lt: 2}
+            else if (type === 'normal')
+                filterType = {$gt: -1, $lt: 0.5}
+
             const rawPredictions = await Predict.find({
                 userId,
+                percent: filterType
             }, {
                 __v: 0, userId: 0,
             }).limit((limit * 1 as any))
                 .skip((page - 1) * limit)
                 .exec()
+
             const predictions = rawPredictions.map(el => ({
                 ...el['_doc'],
                 path: el['_doc'].path.split('\\').pop()
             }))
-            const count = await Predict.countDocuments()
+            const count = await Predict.countDocuments({
+                userId,
+                percent: filterType,
+            })
+
             res.json({
                 predictions,
                 totalPages: Math.ceil((count) / limit),

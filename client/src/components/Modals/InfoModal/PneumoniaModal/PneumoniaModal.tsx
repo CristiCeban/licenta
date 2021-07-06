@@ -10,7 +10,7 @@ const PneumoniaModal = ({t}: ModalParams) => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>
-                {t('aboutApp.info.app')}
+                {t('aboutApp.info.pneumonia')}
             </Text>
         </View>
     )

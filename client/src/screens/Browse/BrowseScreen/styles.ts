@@ -22,4 +22,12 @@ export const styles = StyleSheet.create({
         borderRadius: 20,
         height: 60
     },
+    filterContainer: {
+        display: 'flex',
+        alignSelf: 'flex-end',
+    },
+    modalize: {
+        backgroundColor: Colors.bottomGradient,
+        padding: 10,
+    }
 })

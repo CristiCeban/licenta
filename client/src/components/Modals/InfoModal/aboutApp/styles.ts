@@ -7,5 +7,15 @@ export const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         color: 'white'
+    },
+    containerFlexRow:{
+      display:'flex',
+      flex:1,
+      flexDirection:'row',
+    },
+    textMail:{
+        fontSize: 16,
+        color: 'white',
+        fontWeight:'bold',
     }
 })

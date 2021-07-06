@@ -1,7 +1,7 @@
 const Config = Object.freeze({
-    url: 'https://3ac91b1955bf.eu.ngrok.io',
-    apiUrl: 'https://3ac91b1955bf.eu.ngrok.io/api',
-    imageUrl: 'https://3ac91b1955bf.eu.ngrok.io/images/',
+    url: 'https://e675e0fbef5f.eu.ngrok.io',
+    apiUrl: 'https://e675e0fbef5f.eu.ngrok.io/api',
+    imageUrl: 'https://e675e0fbef5f.eu.ngrok.io/images/',
     apiPort: 3000,
     author: 'cebancristi4444@gmail.com',
     tokenVariableName: 'licenta-token-v1',

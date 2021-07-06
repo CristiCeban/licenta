@@ -10,7 +10,7 @@ import ProfileStack from "./ProfileStack";
 
 const TabBarIcon = (props: { name: string, color: string }) => {
     return (
-        <Ionicons name={name} size={30} style={{marginBottom: -3}} {...props}/>
+        <Ionicons size={30} style={{marginBottom: -3}} {...props}/>
     )
 }
 
